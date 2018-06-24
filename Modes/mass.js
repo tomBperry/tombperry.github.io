@@ -9,29 +9,37 @@ const collisionDamping = 1;
 const damping = 1;
 
 let rowNum;
+let energy = 0;
+let wall_x, wall_y;
+let springColour, springThickness;
 
 
 class Ball {
-  constructor(n, x = 0, y = 0, vx0 = 0, vy0 = 0, trail = false, radii = radius, colour = 255) {
-    if (n != -1) {
-      this.n = n;
-      this.position = createVector(((this.n - rowNum * floor(this.n / rowNum)) + 1 / 2) * (2 * radius), 2 * ((floor(this.n / rowNum) + 1 / 2) * radius));
-      this.velocity = createVector(xDot0 + random(xDot0), yDot0 + random(yDot0));
-    } else {
-      this.position = createVector(x, y);
-      this.velocity = createVector(vx0, vy0);
-    }
+  constructor(x0, x = 0, y = 0, radii = radius, vx0 = 0, vy0 = 0, trail = false, colour = 255) {
+    this.position = createVector(x, y);
+    this.eqPos = createVector(x0, height/2);
+    this.displacement = this.position.x - this.eqPos.x;
+    this.velocity = createVector(vx0, vy0);
+    this.maxAmp = 0;
+    this.acceleration = zero.copy();
     this.colour = colour;
     this.radius = radii;
-    this.mass = this.radius * this.radius;
+    this.mass = PI * this.radius * this.radius;
     if (trail) {
       this.trail = [];
     }
   }
 
-  move() {
-    this.position.add(this.velocity);
+  update() {
+    this.displacement = this.position.x - this.eqPos.x;
+    this.velocity.add(this.acceleration);
     this.velocity.mult(damping);
+    this.position.add(this.velocity);
+    this.acceleration.set(zero);
+  }
+
+  addForce(force) {
+    this.acceleration.add(force.div(this.mass))
   }
 
   show() {
@@ -61,13 +69,8 @@ class Ball {
 
   bounce() {
 
-    if (keyIsPressed && keyCode === ENTER) {
-      wall_x = mouseX;
-      wall_y = mouseY;
-    } else {
-      wall_x = width - this.radius;
-      wall_y = height - this.radius
-    }
+    wall_x = width - this.radius;
+    wall_y = height - this.radius
 
     if (this.position.x > wall_x) {
       let widthOverlap = this.position.x - wall_x;
@@ -99,6 +102,14 @@ class Ball {
   kEnergy() {
     return 0.5 * this.mass * this.velocity.dot(this.velocity);
   }
+
+  amplitude() {
+    if (this.displacement > this.maxAmp) {
+      this.maxAmp = this.displacement;
+      // console.log(this.maxAmp);
+    }
+  }
+
 }
 
 
@@ -126,9 +137,22 @@ function collide(a, b) {
   b.velocity.set(vbTemp.add(vVcm));
 }
 
-
 function distanceSq(a, b) {
   let dx = a.position.x - b.position.x;
   let dy = a.position.y - b.position.y;
   return dx * dx + dy * dy;
+}
+
+function showSprings() {
+  for (i = 0; i < 2; i++) {
+    springThickness = map(abs(balls[i].displacement), 0, balls[i].maxAmp, 10, 1);
+    springColour = map(abs(balls[i].displacement),0, balls[i].maxAmp, 100, 255);
+    stroke(springColour, 100, 100);
+    strokeWeight(springThickness);
+    // console.log(springColour);
+    // console.log(springThickness);
+    line(balls[i].eqPos, height / 2, balls[i].position.x, height / 2);
+  }
+
+  // line(balls[0].position.x, height/2, balls[1].position.x, height/2);
 }

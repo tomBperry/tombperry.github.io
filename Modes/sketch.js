@@ -2,18 +2,20 @@ const M = 0;
 const N = M + 0;
 let balls = [];
 let zero, unit;
-let k = [1, 1, 1];
+let k = [0.2, 0.1, 0.2];
 let c1, c2;
+let Amp;
 
 function setup() {
-  zero = createVector(0);
+  zero = createVector(0, 0);
   unit = createVector(1, 0);
   createCanvas(300, 200);
+  colorMode(RGB, 255);
   rowNum = floor(width / (2 * radius + 1));
 
 
-  balls[N + 0] = new Ball(width / 3, width / 3, height / 2, 1 * radius);
-  balls[N + 1] = new Ball(2 * width / 3, width * 2 / 3 + 10, height / 2, 1 * radius);
+  balls[N + 0] = new Ball(width / 3, height / 2, width / 3, height / 2 - 50, 1 * radius);
+  balls[N + 1] = new Ball(2 * width / 3, height / 2, width * 2 / 3 + 0, height / 2 + 50, 1 * radius);
   // balls[N + 2] = new Ball(width * (0.3), height / 2, 5, 0, true, 0.9 * radius);
 }
 
@@ -21,15 +23,24 @@ function setup() {
 function draw() {
   background(0);
 
-  c1 = -(k[0] + k[1]) * (balls[0].displacement) + k[1] * (balls[1].displacement);
-  c2 = -(k[1] + k[2]) * (balls[1].displacement) + k[1] * (balls[0].displacement);
-  balls[0].addForce(unit.copy().mult(c1));
-  balls[1].addForce(unit.copy().mult(c2));
+  for (let n = 0; n < balls.length; n++) {
+    Amp = balls[n].amplitude();
+  }
+
+  c1 = balls[0].disp.copy().mult(-(k[0] + k[1]));
+  c1.add(balls[1].disp.copy().mult(k[1]));
+  c2 = balls[1].disp.copy().mult(-(k[2] + k[1]));
+  c2.add(balls[0].disp.copy().mult(k[1]));
+
+  balls[0].addForce(c1);
+  balls[1].addForce(c2);
+
+  realtiveSep();
+  showSprings();
 
   for (let n = 0; n < balls.length; n++) {
-    // balls[n].bounce();
+    balls[n].bounce();
     balls[n].update();
-    balls[n].amplitude();
     balls[n].show();
     //balls[n].trails();
     // energy += balls[n].kEnergy();
@@ -45,7 +56,4 @@ function draw() {
       }
     }
   }
-
-  // showSprings();
 }
-// Random bouncing

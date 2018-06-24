@@ -12,15 +12,18 @@ let rowNum;
 let energy = 0;
 let wall_x, wall_y;
 let springColour, springThickness;
+let sep;
+let minSep = 100;
+let maxSep = 100;
 
 
 class Ball {
-  constructor(x0, x = 0, y = 0, radii = radius, vx0 = 0, vy0 = 0, trail = false, colour = 255) {
+  constructor(x0, y0, x = 0, y = 0, radii = radius, vx0 = 0, vy0 = 0, trail = false, colour = 255) {
     this.position = createVector(x, y);
-    this.eqPos = createVector(x0, height/2);
-    this.displacement = this.position.x - this.eqPos.x;
-    this.velocity = createVector(vx0, vy0);
+    this.eqPos = createVector(x0, y0);
+    this.disp = this.position.copy().sub(this.eqPos);
     this.maxAmp = 0;
+    this.velocity = createVector(vx0, vy0);
     this.acceleration = zero.copy();
     this.colour = colour;
     this.radius = radii;
@@ -31,15 +34,15 @@ class Ball {
   }
 
   update() {
-    this.displacement = this.position.x - this.eqPos.x;
     this.velocity.add(this.acceleration);
+    this.position.add(this.velocity.copy());
     this.velocity.mult(damping);
-    this.position.add(this.velocity);
-    this.acceleration.set(zero);
+    this.acceleration.mult(0);
   }
 
   addForce(force) {
-    this.acceleration.add(force.div(this.mass))
+    this.acceleration.add(force.copy().div(this.mass));
+    // console.log(this.acceleration);
   }
 
   show() {
@@ -104,9 +107,10 @@ class Ball {
   }
 
   amplitude() {
-    if (this.displacement > this.maxAmp) {
-      this.maxAmp = this.displacement;
-      // console.log(this.maxAmp);
+    this.disp.set(this.position.copy().sub(this.eqPos));
+    if (this.disp.mag() > this.maxAmp) {
+      this.maxAmp = this.disp.mag();
+      return this.maxAmp;
     }
   }
 
@@ -144,15 +148,34 @@ function distanceSq(a, b) {
 }
 
 function showSprings() {
-  for (i = 0; i < 2; i++) {
-    springThickness = map(abs(balls[i].displacement), 0, balls[i].maxAmp, 10, 1);
-    springColour = map(abs(balls[i].displacement),0, balls[i].maxAmp, 100, 255);
-    stroke(springColour, 100, 100);
-    strokeWeight(springThickness);
-    // console.log(springColour);
-    // console.log(springThickness);
-    line(balls[i].eqPos, height / 2, balls[i].position.x, height / 2);
-  }
+  springThickness = map(abs((balls[0].position.copy().sub(balls[1].position)).mag()),
+    minSep, maxSep, 10, 5);
+  springColour = map(abs((balls[0].position.copy().sub(balls[1].position)).mag()),
+    minSep, maxSep, 0, 100);
+  strokeWeight(springThickness);
+  stroke(100, springColour, 200, 200);
+  line(balls[0].position.x, balls[0].position.y, balls[1].position.x,
+    balls[1].position.y);
 
-  // line(balls[0].position.x, height/2, balls[1].position.x, height/2);
+  for (i = 0; i < balls.length; i++) {
+    springThickness = map(abs(balls[i].disp.mag()), 0, balls[i].maxAmp, 10, 5);
+    springColour = map(abs(balls[i].disp.mag()), 0, balls[i].maxAmp, 100, 255);
+    stroke(springColour, 0, 0, 150);
+    strokeWeight(springThickness);
+    line(0 + i *width, balls[i].eqPos.y,
+      balls[i].position.x, balls[i].position.y);
+  }
+}
+
+function realtiveSep() {
+  sep = abs((balls[0].position.copy().sub(balls[1].position.copy())).mag());
+
+  if (sep > maxSep) {
+    maxSep = sep;
+    console.log("Max Separation: " + sep)
+  }
+  if (sep < minSep) {
+    minSep = sep;
+    console.log("Min Separation: " + sep)
+  }
 }

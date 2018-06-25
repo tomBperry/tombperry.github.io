@@ -2,21 +2,20 @@ const M = 0;
 const N = M + 0;
 let balls = [];
 let zero, unit;
-let k = [0.2, 0.1, 0.2];
+let k = [0.2, 0.301, 0.2];
 let c1, c2;
 let Amp;
 
 function setup() {
   zero = createVector(0, 0);
   unit = createVector(1, 0);
-  createCanvas(300, 200);
+  createCanvas(500, 400);
   colorMode(RGB, 255);
   rowNum = floor(width / (2 * radius + 1));
 
 
-  balls[N + 0] = new Ball(width / 3, height / 2, width / 3, height / 2 - 50, 1 * radius);
-  balls[N + 1] = new Ball(2 * width / 3, height / 2, width * 2 / 3 + 0, height / 2 + 50, 1 * radius);
-  // balls[N + 2] = new Ball(width * (0.3), height / 2, 5, 0, true, 0.9 * radius);
+  balls[N + 0] = new Ball(width / 3, height / 2, width / 3 + 100, height / 2, 1 * radius);
+  balls[N + 1] = new Ball(2 * width / 3, height / 2, width * 2 / 3, height / 2 + 100, 1 * radius);
 }
 
 
@@ -42,7 +41,7 @@ function draw() {
     balls[n].bounce();
     balls[n].update();
     balls[n].show();
-    //balls[n].trails();
+    balls[n].trails();
     // energy += balls[n].kEnergy();
   }
 

@@ -18,7 +18,7 @@ let maxSep = 100;
 
 
 class Ball {
-  constructor(x0, y0, x = 0, y = 0, radii = radius, vx0 = 0, vy0 = 0, trail = false, colour = 255) {
+  constructor(x0, y0, x = 0, y = 0, radii = radius, vx0 = 0, vy0 = 0, trail = true, colour = 255) {
     this.position = createVector(x, y);
     this.eqPos = createVector(x0, y0);
     this.disp = this.position.copy().sub(this.eqPos);
@@ -42,15 +42,12 @@ class Ball {
 
   addForce(force) {
     this.acceleration.add(force.copy().div(this.mass));
-    // console.log(this.acceleration);
   }
 
   show() {
-    //noStroke();
     fill(this.colour);
-    stroke(this.colour);
+    stroke(this.colour, 150);
     strokeWeight(2);
-    //noFill();
     ellipse(this.position.x, this.position.y, 2 * this.radius);
   }
 
@@ -61,7 +58,7 @@ class Ball {
     }
 
     stroke(this.colour);
-    strokeWeight(1);
+    strokeWeight(0.2);
     noFill();
     beginShape();
     for (let i = 0; i < this.trail.length; i += 2) {
@@ -113,7 +110,6 @@ class Ball {
       return this.maxAmp;
     }
   }
-
 }
 
 
@@ -172,10 +168,8 @@ function realtiveSep() {
 
   if (sep > maxSep) {
     maxSep = sep;
-    console.log("Max Separation: " + sep)
   }
   if (sep < minSep) {
     minSep = sep;
-    console.log("Min Separation: " + sep)
   }
 }

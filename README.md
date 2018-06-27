@@ -13,3 +13,7 @@ Changed the displacement calculation to vectors and had this calculated before f
 
 
 Centre of masses does not align with the join from the springs.
+
+
+27/06/18:
+To be able to simulate a lumpy string with variable parameters and then take to the continuous limit of a string with a uniform density and then to discontinuities with masses.

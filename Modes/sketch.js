@@ -1,58 +1,81 @@
-const M = 0;
-const N = M + 0;
 let balls = [];
-let zero, unit;
-let k = [0.2, 0.301, 0.2];
-let c1, c2;
+let zero, unitx, unity;
+let k = [];
+let c = [];
 let Amp;
+let rowSep;
+const radius = 2;
+const trailLength = 200;
+let Fxn, Fyn, Fx0, Fy0;
+
+const T = 10;
+const damping = 1;
+
+const N = 5;
 
 function setup() {
-  zero = createVector(0, 0);
-  unit = createVector(1, 0);
   createCanvas(500, 400);
   colorMode(RGB, 255);
-  rowNum = floor(width / (2 * radius + 1));
 
+  rowSep = width / (N + 1);;
 
-  balls[N + 0] = new Ball(width / 3, height / 2, width / 3 + 100, height / 2, 1 * radius);
-  balls[N + 1] = new Ball(2 * width / 3, height / 2, width * 2 / 3, height / 2 + 100, 1 * radius);
+  zero = createVector(0, 0);
+  unitx = createVector(1, 0);
+  unity = createVector(0, 1);
+
+  for (let n = 0; n < N; n++) {
+    balls.push(new Ball(n));
+  }
+  balls[N-1].velocity.add(0, 1);
+  // balls[2].position.add(0, -50);
+  // balls[0].position.add(0, 40);
 }
-
 
 function draw() {
   background(0);
 
   for (let n = 0; n < balls.length; n++) {
-    Amp = balls[n].amplitude();
+    //Amp = balls[n].amplitude();
+    balls[n].angle = calcAngle(n);
   }
 
-  c1 = balls[0].disp.copy().mult(-(k[0] + k[1]));
-  c1.add(balls[1].disp.copy().mult(k[1]));
-  c2 = balls[1].disp.copy().mult(-(k[2] + k[1]));
-  c2.add(balls[0].disp.copy().mult(k[1]));
 
-  balls[0].addForce(c1);
-  balls[1].addForce(c2);
+  dx = balls[0].position.x;
+  dy = (height/2)-balls[0].position.y;
+  theta0 = atan(-dy/dx);
 
-  realtiveSep();
-  showSprings();
+  Fx0 = T * (sin(balls[0].angle)-sin(theta0));
+  Fy0 = T * (cos(balls[0].angle)-cos(theta0));
+
+  // balls[0].addForce(unitx.copy().mult(Fxn));
+  balls[0].addForce(unity.copy().mult(Fyn));
+
+  for (let n = 1; n < balls.length; n++) {
+    Fyn = T * (sin(balls[n].angle) - sin(balls[n - 1].angle));
+    Fxn = T * (cos(balls[n].angle) - cos(balls[n - 1].angle))
+
+    // balls[n].addForce(unitx.copy().mult(Fxn));
+    balls[n].addForce(unity.copy().mult(Fyn));
+  }
 
   for (let n = 0; n < balls.length; n++) {
-    balls[n].bounce();
     balls[n].update();
     balls[n].show();
-    balls[n].trails();
+    // balls[n].trails();
     // energy += balls[n].kEnergy();
   }
+  // realtiveSep();
+  // showSprings();
 
 
-  for (let i = 0; i < balls.length; i++) {
-    for (let j = i + 1; j < balls.length; j++) {
-      if (distanceSq(balls[i], balls[j]) < (balls[i].radius + balls[j].radius) *
-        (balls[i].radius + balls[j].radius)) {
-        collide(balls[i], balls[j]);
-        console.log("Collision!")
-      }
-    }
-  }
+
+  // for (let i = 0; i < balls.length; i++) {
+  //   for (let j = i + 1; j < balls.length; j++) {
+  //     if (distanceSq(balls[i], balls[j]) < (balls[i].radius + balls[j].radius) *
+  //       (balls[i].radius + balls[j].radius)) {
+  //       collide(balls[i], balls[j]);
+  //       console.log("Collision!")
+  //     }
+  //   }
+  // }
 }

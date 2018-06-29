@@ -107,7 +107,6 @@ class Ball {
     this.disp.set(this.position.copy().sub(this.eqPos));
     if (this.disp.mag() > this.maxAmp) {
       this.maxAmp = this.disp.mag();
-      return this.maxAmp;
     }
   }
 }

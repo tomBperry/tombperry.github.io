@@ -4,7 +4,6 @@ let balls = [];
 let zero, unit;
 let k = [0.2, 0.301, 0.2];
 let c1, c2;
-let Amp;
 
 function setup() {
   zero = createVector(0, 0);
@@ -23,7 +22,7 @@ function draw() {
   background(0);
 
   for (let n = 0; n < balls.length; n++) {
-    Amp = balls[n].amplitude();
+    balls[n].amplitude();
   }
 
   c1 = balls[0].disp.copy().mult(-(k[0] + k[1]));

@@ -1,13 +1,15 @@
 let balls = [];
 let zero, unitx, unity;
 let k = [];
-let c = [];
-let Amp;
+let Amp, energy;
 let rowSep;
+let Restoringforce;
+
 const radius = 2;
 const trailLength = 200;
 
 const T = 10;
+const c = T/500;
 const damping = 1;
 
 const N = 5;
@@ -17,18 +19,19 @@ function setup() {
   colorMode(RGB, 255);
 
   rowSep = width / (N + 1);
-  const c = T/width
+  console.log("c: " + c);
 
   zero = createVector(0, 0);
-  unity = createVector(0, 1);
+  unit = createVector(0, 1);
 
   for (let n = 0; n < N; n++) {
     balls.push(new Ball(n));
+    balls[n].position.add(createVector(0, random(-10,10)));
   }
-  balls[0].position.add(0, 10);
-  // balls[2].position.add(0, -50);
-  // balls[0].position.add(0, 40);
+  balls[1].position.add(0, 10);
 }
+
+
 
 function draw() {
   background(0);
@@ -38,28 +41,22 @@ function draw() {
   // }
 
   for (let n = 0; n < balls.length; n++) {
-    balls[n].update();
-    balls[n].show();
-    // balls[n].trails();
-    // energy += balls[n].kEnergy();
+    calcForce(n);
+    balls[n].addForce(unit.copy().mult(Fn));
   }
 
   for (let n = 0; n < balls.length; n++) {
-    balls[n].addForce(calcForce(n));
+    balls[n].update();
+    balls[n].show();
+    // balls[n].trails();
+    energy += balls[n].Energy();
   }
+  if (frameCount % 6 == 0) {
+    console.log("Energy: " + energy);
+  }
+  energy = 0;
 
   // realtiveSep();
   // showSprings();
 
-
-
-  // for (let i = 0; i < balls.length; i++) {
-  //   for (let j = i + 1; j < balls.length; j++) {
-  //     if (distanceSq(balls[i], balls[j]) < (balls[i].radius + balls[j].radius) *
-  //       (balls[i].radius + balls[j].radius)) {
-  //       collide(balls[i], balls[j]);
-  //       console.log("Collision!")
-  //     }
-  //   }
-  // }
 }

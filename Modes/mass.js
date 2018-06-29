@@ -8,7 +8,7 @@ let Fn;
 class Ball {
   constructor(n, radii = radius, vx0 = 0, vy0 = 0, trail = false, colour = 255) {
     this.position = createVector((n + 1) * rowSep, height / 2);
-    this.eqPos = this.position;
+    this.eqPos = createVector((n + 1) * rowSep, height / 2);
     this.disp = this.position.copy().sub(this.eqPos);
     this.angle = 0
     this.maxAmp = 0;
@@ -57,7 +57,7 @@ class Ball {
     endShape();
   }
 
-  kEnergy() {
+  Energy() {
     return 0.5 * this.mass * this.velocity.dot(this.velocity);
   }
 
@@ -108,12 +108,11 @@ function realtiveSep() {
 }
 
 function calcForce(n) {
-  if (n = 0) {
+  if (n == 0) {
     Fn = c * (balls[n + 1].disp.y - 2 * balls[n].disp.y);
-  } else if (n = N - 1) {
+  } else if (n == N - 1) {
     Fn = c * (balls[n - 1].disp.y - 2 * balls[n].disp.y);
   } else {
     Fn = c * (balls[n + 1].disp.y + balls[n - 1].disp.y - 2 * balls[n].disp.y);
   }
-  return unity.copy().mult(Fn);
 }

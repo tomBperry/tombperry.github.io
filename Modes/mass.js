@@ -6,7 +6,7 @@ let dx, dy, theta;
 
 
 class Ball {
-  constructor(n, radii = radius, vx0 = 0, vy0 = 0, trail = false, colour = 255) {
+  constructor(n, radii = radius, vx0 = 0, vy0 = 0, colour = 255, trail = false) {
     this.position = createVector((n + 1) * rowSep, height / 2);
     this.eqPos = this.position;
     this.disp = this.position.copy().sub(this.eqPos);
@@ -108,8 +108,8 @@ function realtiveSep() {
 
 function calcAngle(n) {
   if(n == N - 1) {
-    dx = -width + balls[n].position.x;
-    dy = -height/2 + balls[n].position.y;
+    dx = width - balls[n].position.x;
+    dy = height/2 - balls[n].position.y;
   } else {
     dx = balls[n + 1].position.x - balls[n].position.x;
     dy = balls[n + 1].position.y - balls[n].position.y;

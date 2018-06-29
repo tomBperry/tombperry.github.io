@@ -2,7 +2,7 @@ let springColour, springThickness;
 let sep;
 let minSep = 100;
 let maxSep = 100;
-let dx, dy, theta;
+let Fn;
 
 
 class Ball {
@@ -23,6 +23,7 @@ class Ball {
   }
 
   update() {
+    this.disp = this.position.copy().sub(this.eqPos);
     this.velocity.add(this.acceleration);
     this.position.add(this.velocity.copy());
     this.velocity.mult(damping);
@@ -106,13 +107,13 @@ function realtiveSep() {
   }
 }
 
-function calcAngle(n) {
-  if(n == N - 1) {
-    dx = -width + balls[n].position.x;
-    dy = -height/2 + balls[n].position.y;
+function calcForce(n) {
+  if (n = 0) {
+    Fn = c * (balls[n + 1].disp.y - 2 * balls[n].disp.y);
+  } else if (n = N - 1) {
+    Fn = c * (balls[n - 1].disp.y - 2 * balls[n].disp.y);
   } else {
-    dx = balls[n + 1].position.x - balls[n].position.x;
-    dy = balls[n + 1].position.y - balls[n].position.y;
+    Fn = c * (balls[n + 1].disp.y + balls[n - 1].disp.y - 2 * balls[n].disp.y);
   }
-  return theta = atan(dy / dx);
+  return unity.copy().mult(Fn);
 }

@@ -2,33 +2,37 @@ let balls = [];
 let zero, unitx, unity;
 let k = [];
 let Amp, energy;
-let rowSep;
+let rowSep, c;
 let Restoringforce;
 
-const radius = 2;
-const trailLength = 200;
+const radius = 1;
+const trailLength = 5;
 
 const T = 10;
-const c = T/500;
 const damping = 1;
 
-const N = 5;
+const N = 300;
+const M = 1;
 
 function setup() {
   createCanvas(500, 400);
   colorMode(RGB, 255);
 
   rowSep = width / (N + 1);
-  console.log("c: " + c);
+  c = T / width;
+  const A = 200/M;
 
   zero = createVector(0, 0);
   unit = createVector(0, 1);
 
   for (let n = 0; n < N; n++) {
     balls.push(new Ball(n));
-    balls[n].position.add(createVector(0, random(-10,10)));
+
+    for (let i = 1; i <= M; i++) {
+      balls[n].position.y = balls[n].position.y +
+        A * sin(2*i * PI * balls[n].position.x / width);
+    }
   }
-  balls[1].position.add(0, 10);
 }
 
 
@@ -36,9 +40,9 @@ function setup() {
 function draw() {
   background(0);
 
-  // for (let n = 0; n < balls.length; n++) {
-     //Amp = balls[n].amplitude();
-  // }
+  for (let n = 0; n < balls.length; n++) {
+    balls[n].amplitude();
+  }
 
   for (let n = 0; n < balls.length; n++) {
     calcForce(n);
@@ -48,15 +52,15 @@ function draw() {
   for (let n = 0; n < balls.length; n++) {
     balls[n].update();
     balls[n].show();
-    // balls[n].trails();
+    balls[n].trails();
     energy += balls[n].Energy();
   }
-  if (frameCount % 6 == 0) {
+  if (frameCount % 60 == 0) {
     console.log("Energy: " + energy);
   }
   energy = 0;
 
   // realtiveSep();
-  // showSprings();
+  showSprings();
 
 }

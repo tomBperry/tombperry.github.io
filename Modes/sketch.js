@@ -1,56 +1,53 @@
-const M = 10;
-const N = M + 0;
-
 let balls = [];
+let zero, unit;
+let rowSep;
+let Fn, f0;
 
-let energy = 0;
-
-let fps;
-let avgFPS = 60;
-let count = 0;
-
-let timesLagged = 0;
-let mouseToggled = true;
-let wall_x, wall_y;
+const radius = 3;
+const T = 3;
+const damping = 1;
+const N = 500;
+const M = 2;
 
 
 function setup() {
-  createCanvas(700, 200);
-  rowNum = floor(width / (2 * radius + 1));
+  createCanvas(770, 450);
+  colorMode(RGB, 255);
+  const A = 0.5 * height / M
+  rowSep = width / (N + 1);;
+  zero = createVector();
+  unit = createVector(0, 1);
 
   for (let n = 0; n < N; n++) {
-    if (n < N - M) { // Need to change if using for kinematics (add no of free particles)
-      balls[n] = new Ball(n);
-    } else {
-      balls[n] = new Ball(n, 0, 0, 0, 0, true, 2 * radius, 151);
+    balls.push(new Ball(n));
+
+    for (let i = 0; i <= M; i++) {
+      balls[n].position.y = balls[n].position.y +
+        A * sin(i * PI * balls[n].position.x / width);
     }
   }
 
-  balls[N + 0] = new Ball(-1, width * (0.3), height / 2, 0, 0, true, 3 * radius);
-  balls[N + 1] = new Ball(-1, width * (0.3), height / 2, 5, 0, true, 0.9 * radius);
-  balls[N + 2] = new Ball(-1, width * (0.5), height / 2, 0, 0, true, 2 * radius);
-
 }
-// Bouncing randomly???/
 
 function draw() {
   background(0);
 
   for (let n = 0; n < balls.length; n++) {
-    balls[n].bounce();
-    balls[n].move();
-    energy += balls[n].kEnergy();
-    if (n >= balls.length - M) {
-      balls[n].show();
-      balls[n].trails();
-    }
+    balls[n].angle = calcAngle(n);
+  }
+  dy = balls[0].position.y - (height / 2);
+  theta0 = atan(dy / rowSep);
+
+  f0 = T * (sin(balls[0].angle) - sin(theta0)); //T * (balls[0].angle - theta0);
+  balls[0].addForce(unit.copy().mult(f0));
+
+  for (let n = 1; n < balls.length; n++) {
+    Fn = T * (sin(balls[n].angle) - sin(balls[n - 1].angle));// T * (balls[n].angle - balls[n - 1].angle);
+    balls[n].addForce(unit.copy().mult(Fn));
   }
 
-  for (let i = 0; i < balls.length; i++) {
-    for (let j = i + 1; j < balls.length; j++) {
-      if (distanceSq(balls[i], balls[j]) < (balls[i].radius + balls[j].radius) * (balls[i].radius + balls[j].radius)) {
-        collide(balls[i], balls[j]);
-      }
-    }
+  for (let n = 0; n < balls.length; n++) {
+    balls[n].update();
+    balls[n].show();
   }
 }

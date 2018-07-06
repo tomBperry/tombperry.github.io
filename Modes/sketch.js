@@ -2,11 +2,12 @@ let balls = [];
 let zero, unit;
 let rowSep;
 let Fn, f0;
+let mouseToggle = 0;
 
-const radius = 3;
+const radius = 10;
 const T = 3;
 const damping = 0.999;
-const N = 500;
+const N = 50;
 const M = 2;
 
 
@@ -32,7 +33,15 @@ function setup() {
 function draw() {
   background(0);
   
-  if (mouseIsPressed) {
+  if (mousePressed) {
+    if (mouseToggle) {
+      mouseToggle = 0;
+    } else {
+      mouseToggle = 1;
+    }
+  }
+  
+  if (mouseToggle) {
     mousey();
     console.log("mouse");
   }

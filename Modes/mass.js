@@ -1,5 +1,7 @@
 let springColour, springThickness;
 let dy, theta;
+let dx2, dy2;
+
 
 class Ball {
   constructor(n, radii = radius, colour = 255) {
@@ -41,4 +43,17 @@ function calcAngle(n) {
     dy = balls[n + 1].position.y - balls[n].position.y;
   }
   return theta = atan(dy / rowSep);
+}
+
+function mousey() {
+  for (let i = 0; i < balls.length; i++) {
+    dx2 = balls[i].position.x - mouseX;
+    dy2 = balls[i].position.y - mouseY;
+    dx2 = dx2 * dx2;
+    dy2 = dy2 * dy2;
+    if (dx2 + dy2 < balls[i].radius * balls[i].radius) {
+      balls.position.y = mouseY;
+      console.log("Ball: " + i + "is being dragged");
+    }
+  }
 }

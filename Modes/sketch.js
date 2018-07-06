@@ -8,7 +8,7 @@ const radius = 10;
 const T = 3;
 const damping = 0.999;
 const N = 50;
-const M = 0;
+const M = 1;
 
 
 function setup() {
@@ -22,10 +22,10 @@ function setup() {
   for (let n = 0; n < N; n++) {
     balls.push(new Ball(n));
 
-    for (let i = 0; i <= M; i++) {
-      balls[n].position.y = balls[n].position.y +
-        A * sin(i * PI * balls[n].position.x / width);
-    }
+//     for (let i = 0; i <= M; i++) {
+//       balls[n].position.y = balls[n].position.y +
+//         A * sin(i * PI * balls[n].position.x / width);
+//     }
   }
 
 }

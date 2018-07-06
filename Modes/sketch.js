@@ -6,12 +6,12 @@ let Fn, f0;
 const radius = 3;
 const T = 3;
 const damping = 1;
-const N = 50;
+const N = 500;
 const M = 2;
 
 
 function setup() {
-  createCanvas(1300, 1000);
+  createCanvas(770, 450);
   colorMode(RGB, 255);
   const A = 0.5 * height / M
   rowSep = width / (N + 1);;
@@ -31,12 +31,17 @@ function setup() {
 
 function draw() {
   background(0);
+  
+  if (mouseIsPressed) {
+    mousey();
+    console.log("mouse");
+  }
 
   for (let n = 0; n < balls.length; n++) {
     balls[n].angle = calcAngle(n);
   }
   dy = balls[0].position.y - (height / 2);
-  theta0 = atan(dy / rowSep);
+  theta0 = dy / rowSep;
 
   f0 = T * (sin(balls[0].angle) - sin(theta0)); //T * (balls[0].angle - theta0);
   balls[0].addForce(unit.copy().mult(f0));

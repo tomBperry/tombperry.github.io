@@ -33,13 +33,7 @@ function setup() {
 function draw() {
   background(0);
   
-  if (mousePressed) {
-    if (mouseToggle) {
-      mouseToggle = 0;
-    } else {
-      mouseToggle = 1;
-    }
-  }
+
   
   if (mouseToggle) {
     mousey();
@@ -65,3 +59,11 @@ function draw() {
     balls[n].show();
   }
 }
+
+function mousePressed() {
+    if (mouseToggle) {
+      mouseToggle = 0;
+    } else {
+      mouseToggle = 1;
+    }
+  }

@@ -6,12 +6,12 @@ let Fn, f0;
 const radius = 3;
 const T = 3;
 const damping = 1;
-const N = 500;
+const N = 50;
 const M = 2;
 
 
 function setup() {
-  createCanvas(1325, 800);
+  createCanvas(1400, 800);
   colorMode(RGB, 255);
   const A = 0.5 * height / M
   rowSep = width / (N + 1);;

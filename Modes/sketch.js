@@ -5,7 +5,7 @@ let Fn, f0;
 
 const radius = 3;
 const T = 3;
-const damping = 1;
+const damping = 0.999;
 const N = 500;
 const M = 2;
 

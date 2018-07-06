@@ -43,7 +43,7 @@ function draw() {
   
   if (mouseToggle) {
     mousey();
-    console.log("mouse");
+    console.log("Mouse: " + mouseToggle);
   }
 
   for (let n = 0; n < balls.length; n++) {

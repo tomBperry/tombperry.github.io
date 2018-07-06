@@ -11,7 +11,7 @@ const M = 2;
 
 
 function setup() {
-  createCanvas(770, 450);
+  createCanvas(1770, 800);
   colorMode(RGB, 255);
   const A = 0.5 * height / M
   rowSep = width / (N + 1);;

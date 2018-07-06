@@ -19,7 +19,7 @@ class Ball {
   update() {
     this.velocity.add(this.acceleration.copy());
     this.position.add(this.velocity.copy());
-    // this.velocity.mult(damping);
+    this.velocity.mult(damping);
     this.acceleration.set(zero);
   }
 

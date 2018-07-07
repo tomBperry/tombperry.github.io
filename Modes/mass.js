@@ -6,6 +6,7 @@ let dx2, dy2;
 class Ball {
   constructor(n, radii = radius, colour = 255) {
     this.angle = 0
+    this.dragged = false;
 
     this.position = createVector((n + 1) * rowSep, height / 2);
     this.velocity = zero.copy();
@@ -43,17 +44,4 @@ function calcAngle(n) {
     dy = balls[n + 1].position.y - balls[n].position.y;
   }
   return theta = atan(dy / rowSep);
-}
-
-function mousey() {
-  for (let i = 0; i < balls.length; i++) {
-    dx2 = balls[i].position.x - mouseX;
-    dy2 = balls[i].position.y - mouseY;
-    dx2 = dx2 * dx2;
-    dy2 = dy2 * dy2;
-    if (dx2 + dy2 < balls[i].radius * balls[i].radius) {
-      balls[i].position.y = mouseY;
-      console.log("Ball: " + i + "is being dragged");
-    }
-  }
 }

@@ -5,9 +5,9 @@ let Fn, f0;
 let mouseToggle = 0;
 
 const radius = 4;
-const T = 10;
+const T = 20;
 const damping = 0.999;
-const N = 300;
+const N = 1000;
 const M = 1;
 
 

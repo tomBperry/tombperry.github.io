@@ -8,7 +8,7 @@ const radius = 4;
 const T = 20;
 const damping = 0.999;
 const N = 1000;
-const M = 1;
+const M = 4;
 
 
 function setup() {

@@ -22,10 +22,10 @@ function setup() {
   for (let n = 0; n < N; n++) {
     balls.push(new Ball(n));
 
-    //     for (let i = 0; i <= M; i++) {
-    //       balls[n].position.y = balls[n].position.y +
-    //         A * sin(i * PI * balls[n].position.x / width);
-    //     }
+        for (let i = 0; i <= M; i++) {
+          balls[n].position.y = balls[n].position.y +
+            A * sin(i * PI * balls[n].position.x / width);
+        }
   }
 
 }
